@@ -8,11 +8,13 @@ import datetime
 import json
 
 from dateutil import parser as dateutil_parser
+from cement.utils.misc import minimal_logger
 from collections import OrderedDict
-
 from elex.api import maps
 from elex.api import utils
 
+
+LOG = minimal_logger('elex.api')
 PCT_PRECISION = 6
 
 
@@ -812,6 +814,7 @@ class Election(APElection):
             constructor.
         """
         if self.datafile:
+            LOG.debug('Data file specified: %s' % self.datafile)
             with open(self.datafile, 'r') as readfile:
                 payload = dict(json.loads(readfile.read()))
         else:

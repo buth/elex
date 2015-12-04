@@ -9,7 +9,10 @@ import os
 import requests
 import time
 
+from cement.utils.misc import minimal_logger
 from pymongo import MongoClient
+
+LOG = minimal_logger('elex.utils')
 
 
 def write_recording(payload):
@@ -61,7 +64,9 @@ def api_request(path, **params):
         raise KeyError('Oops! You have not exported an AP_API_KEY variable.')
 
     params['format'] = 'json'
-    response = requests.get(elex.BASE_URL + path, params=params)
+    url = '%s%s' % (elex.BASE_URL, path)
+    response = requests.get(url, params=params)
+    LOG.debug('Requested %s (status code %s)' % (response.url, response.status_code))
     payload = response.json()
     write_recording(payload)
     return payload
